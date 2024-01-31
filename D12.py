@@ -3,6 +3,13 @@ import bpy
 from math import radians
 bpy.ops.preferences.addon_enable(module = "add_mesh_extra_objects")
 
+NUMBERS = {
+    1: [1, 8, 11, 14, 19, 22, 27, 30, 35, 38, 41, 48],
+    2: [2, 7, 10, 15, 18, 23, 26, 31, 34, 39, 42, 47],
+    3: [3, 6, 12, 13, 17, 24, 25, 32, 36, 37, 43, 46],
+    4: [4, 5, 9,  16, 20, 21, 28, 29, 33, 40, 44, 45],
+}
+
 
 def pathify(path, name):
     splitFilepath = path.split("\\")
@@ -59,15 +66,28 @@ def makeNum(number, font, scale):
 
 
 def make(digit, font, scale):
+    _make(digit, font, scale)
+    if (digit == 6) or (digit == 9):
+        _make("_", font, scale)
+
+
+def _make(digit, font, scale):
     num = makeNum(digit, font, scale)
-    if digit == "~":
+    if digit == "_":
         num.location[1] -= scale * 3
     bpy.data.objects["die"].select_set(True)
     stamp()
     deleteNum()
 
 
-def makeD12(fontFolder, fontName, outputFolder, scale):
+
+ORIGINAL_ORDER = [6,1,4,3,11,8,7,5,2,10,9,12]
+
+def makeD12(fontFolder, fontName, outputFolder, scale, index, numbers):
+    numbers = sorted(numbers)
+    numbers = [numbers[x-1] for x in ORIGINAL_ORDER]
+
+
     bpy.ops.mesh.primitive_solid_add(source='12')
     die = bpy.context.active_object
     die.name = "die"
@@ -79,81 +99,84 @@ def makeD12(fontFolder, fontName, outputFolder, scale):
     die.scale[0] = die.scale[2]
     die.scale[1] = die.scale[2]
     font = pathify(fontFolder, fontName)
-    make(12, font, scale)
+    make(numbers[0], font, scale)
     die.select_set(True)
     die.rotation_euler[2] = radians(36)
     bpy.ops.object.transform_apply(location = False, rotation = True, scale = False)
     die.rotation_euler[0] = radians(63.43)
-    make(4, font, scale)
+    make(numbers[1], font, scale)
     die.select_set(True)
     die.rotation_euler[0] = 0
     die.rotation_euler[2] = radians(72)
     bpy.ops.object.transform_apply(location = False, rotation = True, scale = False)
     die.rotation_euler[0] = radians(63.43)
-    make(11, font, scale)
+    make(numbers[2], font, scale)
     die.select_set(True)
     die.rotation_euler[0] = 0
     die.rotation_euler[2] = radians(72)
     bpy.ops.object.transform_apply(location = False, rotation = True, scale = False)
     die.rotation_euler[0] = radians(63.43)
-    make(10, font, scale)
+    make(numbers[3], font, scale)
     die.select_set(True)
     die.rotation_euler[0] = 0
     die.rotation_euler[2] = radians(72)
     bpy.ops.object.transform_apply(location = False, rotation = True, scale = False)
     die.rotation_euler[0] = radians(63.43)
-    make(8, font, scale)
+    make(numbers[4], font, scale)
     die.select_set(True)
     die.rotation_euler[0] = 0
     die.rotation_euler[2] = radians(72)
     bpy.ops.object.transform_apply(location = False, rotation = True, scale = False)
     die.rotation_euler[0] = radians(63.43)
-    make(6, font, scale)
-    make("~", font, scale)
+    make(numbers[5], font, scale)
     die.select_set(True)
     die.rotation_euler[0] = 0
     die.rotation_euler[2] = radians(36)
     bpy.ops.object.transform_apply(location = False, rotation = True, scale = False)
     die.rotation_euler[0] = radians(180)
     bpy.ops.object.transform_apply(location = False, rotation = True, scale = False)
-    make(1, font, scale)
+    make(numbers[6], font, scale)
     die.select_set(True)
     die.rotation_euler[2] = radians(36)
     bpy.ops.object.transform_apply(location = False, rotation = True, scale = False)
     die.rotation_euler[0] = radians(63.43)
-    make(7, font, scale)
+    make(numbers[7], font, scale)
     die.select_set(True)
     die.rotation_euler[0] = 0
     die.rotation_euler[2] = radians(72)
     bpy.ops.object.transform_apply(location = False, rotation = True, scale = False)
     die.rotation_euler[0] = radians(63.43)
-    make(5, font, scale)
+    make(numbers[8], font, scale)
     die.select_set(True)
     die.rotation_euler[0] = 0
     die.rotation_euler[2] = radians(72)
     bpy.ops.object.transform_apply(location = False, rotation = True, scale = False)
     die.rotation_euler[0] = radians(63.43)
-    make(3, font, scale)
+    make(numbers[9], font, scale)
     die.select_set(True)
     die.rotation_euler[0] = 0
     die.rotation_euler[2] = radians(72)
     bpy.ops.object.transform_apply(location = False, rotation = True, scale = False)
     die.rotation_euler[0] = radians(63.43)
-    make(2, font, scale)
+    make(numbers[10], font, scale)
     die.select_set(True)
     die.rotation_euler[0] = 0
     die.rotation_euler[2] = radians(72)
     bpy.ops.object.transform_apply(location = False, rotation = True, scale = False)
     die.rotation_euler[0] = radians(63.43)
-    make(9, font, scale)
-    make("~", font, scale)
-    bpy.ops.export_mesh.stl(filepath=pathify(outputFolder, "D12_" + fontName.split(".")[0] + ".stl"))
+    make(numbers[11], font, scale)
+    bpy.ops.export_mesh.stl(filepath=pathify(outputFolder, "D12_" + str(index) + ".stl"))
 
 
 if __name__ == "__main__":
     # Edit these to change font and destination
-    systemFontFolderPath = "C:/Windows/Fonts"
-    chosenFontNameAndExtension = "arial.ttf"
-    outputDestinationFolder = "C:/Users/geo-g/Documents/TTRPG/Dice"
+
+    systemFontFolderPath = "/Library/Fonts/"
+    chosenFontNameAndExtension = "Arial Unicode.ttf"
+    outputDestinationFolder = "./output"
     numScale = 1
-    makeD12(systemFontFolderPath, chosenFontNameAndExtension, outputDestinationFolder, numScale)
+    for idx, numbers in NUMBERS.items():
+        while bpy.data.objects:
+            bpy.data.objects.remove(bpy.data.objects[0], do_unlink=True)
+        print("Working on", idx)
+        makeD12(systemFontFolderPath, chosenFontNameAndExtension, outputDestinationFolder, numScale, idx, numbers)
