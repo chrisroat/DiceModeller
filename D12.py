@@ -90,6 +90,12 @@ def makeD12(fontFolder, fontName, outputFolder, scale, index, numbers):
 
     bpy.ops.mesh.primitive_solid_add(source='12')
     die = bpy.context.active_object
+
+    bevel_mod = die.modifiers.new("mod", 'BEVEL')
+    bevel_mod.width = 0.03
+    bevel_mod.segments = 8
+    bpy.ops.object.modifier_apply(modifier = "mod")
+
     die.name = "die"
     #rotate
     die.rotation_euler[0] = radians(-58.285)
