@@ -59,7 +59,7 @@ def makeNum(number, font, scale):
     bpy.ops.mesh.select_all(action = "SELECT")
     bpy.ops.mesh.extrude_region_move(MESH_OT_extrude_region = {"use_normal_flip":False, "use_dissolve_ortho_edges":False, "mirror":False}, TRANSFORM_OT_translate = {"value":(0, 0, 49.5538), "orient_type":'NORMAL', "orient_matrix":((0, -1, 0), (1, 0, -0), (0, 0, 1)), "orient_matrix_type":'NORMAL', "constraint_axis":(False, False, True), "mirror":False, "use_proportional_edit":False, "proportional_edit_falloff":'SMOOTH', "proportional_size":1, "use_proportional_connected":False, "use_proportional_projected":False, "snap":False, "snap_target":'CLOSEST', "snap_point":(0, 0, 0), "snap_align":False, "snap_normal":(0, 0, 0), "gpencil_strokes":False, "cursor_transform":False, "texture_space":False, "remove_on_cancel":False, "release_confirm":False, "use_accurate":False, "use_automerge_and_split":False})
     bpy.ops.object.editmode_toggle()
-    num.scale = [8 * scale, 8 * scale, 0.05]
+    num.scale = [10 * scale, 10 * scale, 0.1]
     bpy.ops.object.origin_set(type = 'ORIGIN_CENTER_OF_VOLUME', center = 'MEDIAN')
     num.location = [0, 0, 9.75]
     return num
@@ -177,8 +177,8 @@ def makeD12(fontFolder, fontName, outputFolder, scale, index, numbers):
 if __name__ == "__main__":
     # Edit these to change font and destination
 
-    systemFontFolderPath = "/Library/Fonts/"
-    chosenFontNameAndExtension = "Arial Unicode.ttf"
+    systemFontFolderPath = "/System/Library/Fonts/Supplemental"
+    chosenFontNameAndExtension = "Arial Rounded Bold.ttf"
     outputDestinationFolder = "./output"
     numScale = 1
     for idx, numbers in NUMBERS.items():
