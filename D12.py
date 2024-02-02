@@ -4,6 +4,7 @@ from math import radians
 bpy.ops.preferences.addon_enable(module = "add_mesh_extra_objects")
 
 NUMBERS = {
+    0: [None] * 12,
     1: [1, 8, 11, 14, 19, 22, 27, 30, 35, 38, 41, 48],
     2: [2, 7, 10, 15, 18, 23, 26, 31, 34, 39, 42, 47],
     3: [3, 6, 12, 13, 17, 24, 25, 32, 36, 37, 43, 46],
@@ -66,15 +67,16 @@ def makeNum(number, font, scale):
 
 
 def make(digit, font, scale):
-    _make(digit, font, scale)
-    if (digit == 6) or (digit == 9):
-        _make("_", font, scale)
+    if digit is not None:
+        _make(digit, font, scale)
+        if (digit == 6) or (digit == 9):
+            _make("_", font, scale)
 
 
 def _make(digit, font, scale):
     num = makeNum(digit, font, scale)
     if digit == "_":
-        num.location[1] -= scale * 3
+        num.location[1] -= scale * 4
     bpy.data.objects["die"].select_set(True)
     stamp()
     deleteNum()
@@ -84,7 +86,6 @@ def _make(digit, font, scale):
 ORIGINAL_ORDER = [6,1,4,3,11,8,7,5,2,10,9,12]
 
 def makeD12(fontFolder, fontName, outputFolder, scale, index, numbers):
-    numbers = sorted(numbers)
     numbers = [numbers[x-1] for x in ORIGINAL_ORDER]
 
 
